@@ -24,15 +24,14 @@ namespace HolidayCalendar {
         public List<DateTime> GetHolidays(string startDate, string endDate) {            
             var responseBody = SendGetRequest($"{API_URL}/?startDate={startDate}&endDate={endDate}");
             var holidays = JsonSerializer.Deserialize<List<Holiday>>(responseBody);
-            var dates = new List<DateTime>();
-            
-            if (holidays?.Count > 0) {
-                foreach (var holiday in holidays) {
-                    if (!holiday.nationalHoliday) continue;
+            var dates = holidays?
+                .Where(holiday => holiday.nationalHoliday)
+                .Select(holiday =>
+                {
                     var dateParts = holiday.date.Split('-').Select(int.Parse).ToArray();
-                    dates.Add(new DateTime(dateParts[0], dateParts[1], dateParts[2]));
-                }
-            }
+                    return new DateTime(dateParts[0], dateParts[1], dateParts[2]);
+                })
+                .ToList();
             
             return dates;
         }
