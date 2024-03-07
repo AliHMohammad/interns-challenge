@@ -1,4 +1,6 @@
 using System.Net.Http.Headers;
+using System.Text.Json;
+
 
 
 namespace HolidayCalendar {
@@ -15,17 +17,37 @@ namespace HolidayCalendar {
         }
 
         public bool IsHoliday(string date) {            
-            var response = client.GetAsync($"{API_URL}/is-holiday?date={date}").Result;
-            response.EnsureSuccessStatusCode();
+            var responseTask = client.GetAsync($"{API_URL}/is-holiday?date={date}");
+            responseTask.Wait();
+
+            var response = responseTask.Result;
+            
             var responseBody = response.Content.ReadAsStringAsync().Result;
             return responseBody == "true";
         }
         
-        public bool GetHolidays(string startDate, string endDate) {            
-            var response = client.GetAsync($"{API_URL}/?startDate={startDate}&endDate={endDate}").Result;
-            response.EnsureSuccessStatusCode();
-            var responseBody = response.Content.ReadAsStringAsync().Result;
-            return true;
+        public List<DateTime> GetHolidays(string startDate, string endDate) {            
+            var responseTask = client.GetAsync($"{API_URL}/?startDate={startDate}&endDate={endDate}");
+            responseTask.Wait();
+
+            var response = responseTask.Result;
+            
+            var responseBodyTask = response.Content.ReadAsStringAsync();
+            responseBodyTask.Wait();
+
+            var responseBody = responseBodyTask.Result;
+            
+            var holidays = JsonSerializer.Deserialize<List<Holiday>>(responseBody);
+            var dates = new List<DateTime>();
+            
+            if (holidays?.Count > 0) {
+                foreach (var holiday in holidays) {
+                    var dateParts = holiday.date.Split('-').Select(int.Parse).ToArray();
+                    dates.Add(new DateTime(dateParts[0], dateParts[1], dateParts[2]));
+                }
+            } 
+            
+            return dates;
         }
     }
 }

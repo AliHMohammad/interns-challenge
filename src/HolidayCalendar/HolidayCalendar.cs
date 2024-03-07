@@ -14,9 +14,8 @@ public class HolidayCalendar : IHolidayCalendar {
 		// TODO - replace the below exception with your own implementation
 		var stringStartDate = startDate.ToString("yyyy-MM-dd");
 		var stringEndDate = endDate.ToString("yyyy-MM-dd");
-
-		return null;
-		//return apiService.GetHolidays(stringStartDate, stringEndDate);
+		
+		return apiService.GetHolidays(stringStartDate, stringEndDate);
 	}
 
 	
