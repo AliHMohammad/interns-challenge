@@ -42,6 +42,7 @@ namespace HolidayCalendar {
             
             if (holidays?.Count > 0) {
                 foreach (var holiday in holidays) {
+                    if (!holiday.nationalHoliday) continue;
                     var dateParts = holiday.date.Split('-').Select(int.Parse).ToArray();
                     dates.Add(new DateTime(dateParts[0], dateParts[1], dateParts[2]));
                 }

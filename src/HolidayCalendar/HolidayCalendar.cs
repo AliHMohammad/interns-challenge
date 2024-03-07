@@ -17,10 +17,4 @@ public class HolidayCalendar : IHolidayCalendar {
 		
 		return apiService.GetHolidays(stringStartDate, stringEndDate);
 	}
-
-	
-
-    
-  
-  
 }
