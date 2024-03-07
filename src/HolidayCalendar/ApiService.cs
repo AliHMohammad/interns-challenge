@@ -3,13 +3,13 @@ using System.Text.Json;
 
 namespace HolidayCalendar {
 
-    class APIService {
+    class ApiService {
 
         private readonly string API_URL = "https://api.sallinggroup.com/v1/holidays";
         private readonly string BEARER_TOKEN = "6829b007-0619-4f05-8949-eaf8842b8ffb";
         private HttpClient client;
 
-        public APIService() {
+        public ApiService() {
             client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", BEARER_TOKEN);
         }

@@ -2,7 +2,7 @@
 namespace HolidayCalendar;
 public class HolidayCalendar : IHolidayCalendar {
 	
-	private readonly APIService apiService = new();
+	private readonly ApiService apiService = new();
 	
 	public bool IsHoliday(DateTime date) {
 		var stringDate = date.ToString("yyyy-MM-dd");
