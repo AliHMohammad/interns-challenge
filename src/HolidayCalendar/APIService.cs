@@ -1,8 +1,6 @@
 using System.Net.Http.Headers;
 using System.Text.Json;
 
-
-
 namespace HolidayCalendar {
 
     class APIService {
@@ -31,7 +29,7 @@ namespace HolidayCalendar {
                     var dateParts = holiday.date.Split('-').Select(int.Parse).ToArray();
                     return new DateTime(dateParts[0], dateParts[1], dateParts[2]);
                 })
-                .ToList();
+                .ToList() ?? new List<DateTime>();
             
             return dates;
         }
