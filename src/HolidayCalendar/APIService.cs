@@ -17,26 +17,12 @@ namespace HolidayCalendar {
         }
 
         public bool IsHoliday(string date) {            
-            var responseTask = client.GetAsync($"{API_URL}/is-holiday?date={date}");
-            responseTask.Wait();
-
-            var response = responseTask.Result;
-            
-            var responseBody = response.Content.ReadAsStringAsync().Result;
+            var responseBody = SendGetRequest($"{API_URL}/is-holiday?date={date}");
             return responseBody == "true";
         }
         
         public List<DateTime> GetHolidays(string startDate, string endDate) {            
-            var responseTask = client.GetAsync($"{API_URL}/?startDate={startDate}&endDate={endDate}");
-            responseTask.Wait();
-
-            var response = responseTask.Result;
-            
-            var responseBodyTask = response.Content.ReadAsStringAsync();
-            responseBodyTask.Wait();
-
-            var responseBody = responseBodyTask.Result;
-            
+            var responseBody = SendGetRequest($"{API_URL}/?startDate={startDate}&endDate={endDate}");
             var holidays = JsonSerializer.Deserialize<List<Holiday>>(responseBody);
             var dates = new List<DateTime>();
             
@@ -46,9 +32,16 @@ namespace HolidayCalendar {
                     var dateParts = holiday.date.Split('-').Select(int.Parse).ToArray();
                     dates.Add(new DateTime(dateParts[0], dateParts[1], dateParts[2]));
                 }
-            } 
+            }
             
             return dates;
         }
+
+        private string SendGetRequest(string url) {
+            var response = client.GetAsync(url).Result;
+            response.EnsureSuccessStatusCode();
+            return response.Content.ReadAsStringAsync().Result;
+        }
+        
     }
 }

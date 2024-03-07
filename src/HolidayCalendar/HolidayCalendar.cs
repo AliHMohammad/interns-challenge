@@ -6,15 +6,12 @@ public class HolidayCalendar : IHolidayCalendar {
 	
 	public bool IsHoliday(DateTime date) {
 		var stringDate = date.ToString("yyyy-MM-dd");
-		
 		return apiService.IsHoliday(stringDate);
   	}
 
 	public ICollection<DateTime> GetHolidays(DateTime startDate, DateTime endDate) {
-		// TODO - replace the below exception with your own implementation
 		var stringStartDate = startDate.ToString("yyyy-MM-dd");
 		var stringEndDate = endDate.ToString("yyyy-MM-dd");
-		
 		return apiService.GetHolidays(stringStartDate, stringEndDate);
 	}
 }
